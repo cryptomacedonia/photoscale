@@ -8,21 +8,25 @@
 import Foundation
 import SwiftUI
 class SFGalleryViewModel : ObservableObject {
-    @Published var allImages:[String] = ["image1", "image2","image3" ,"image4"]
+   
+    @Published var allImages:[String] = ["image1", "image2","image3" ,"image4","image5", "image6","image7" ,"image8","image9", "image10","image11" ,"image12","image13", "image14","image15" ,"image16","image17", "image18","image19" ,"image20","image21", "image22","image23" ,"image24"]
  //   @Published var selectedImageIndex: Int? = nil
     @Published var selectedImageId: String = ""
     @Published var showTab = false
     @Published var fullImageOffset: CGSize = .zero
     @Published var backOpacity: Double = 1.0
     @Published var fullImageScale: CGFloat = 1
+    @Published var opacityOfSelectedItem: Double = 1.0
     func onChange(value: CGSize) {
-        
-        fullImageOffset = value
-        
+        DispatchQueue.main.async { [self] in
+            fullImageOffset = value
+        }
         let halfHeight = UIScreen.main.bounds.height / 2
         let progress = fullImageOffset.height / halfHeight
-        withAnimation(.default) {
-            backOpacity = Double(1.0 - (progress < 0 ? -progress : progress)) 
+        DispatchQueue.main.async { [self] in
+            withAnimation(.default) {
+                backOpacity = Double(1.0 - (progress < 0 ? -progress : progress))
+            }
         }
     }
     func onEnd(value: DragGesture.Value) {
@@ -35,7 +39,9 @@ class SFGalleryViewModel : ObservableObject {
                 fullImageOffset = .zero
                 backOpacity = 1.0
             } else {
-                showTab.toggle()
+                withAnimation {
+                    showTab.toggle()
+                }
                 fullImageOffset = .zero
                 backOpacity = 1.0
             }
