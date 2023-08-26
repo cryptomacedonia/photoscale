@@ -17,13 +17,12 @@ struct ContentView: View {
 
 struct GridView: View {
     @EnvironmentObject var model: SFGalleryViewModel
-    @Namespace var namespace
     init() {
         UIScrollView.appearance().bounces = false
     }
     @State var isSource = true
     var body: some View {
-        let columns = Array(repeating: GridItem(.flexible(),spacing: 10), count: 3)
+        let columns = Array(repeating: GridItem(.fixed(self.getRect().width/3.7),spacing: 10), count: 3)
         ScrollView {
             ScrollViewReader { proxy in
             LazyVGrid(columns: columns, alignment: .center, spacing: 15 ,content: {
@@ -36,7 +35,7 @@ struct GridView: View {
 //                            Text("Test")
 //                        }
 
-                    SFThumbView(namespace: namespace, index: index).opacity(model.selectedImageId == model.allImages[index] && model.showTab ? 0.05 : 1.0).id(model.allImages[index]).matchedGeometryEffect(id: model.allImages[index], in: namespace, isSource: !model.showTab)
+                    SFThumbView( index: index).opacity(model.selectedImageId == model.allImages[index] && model.showTab ? 0.05 : 1.0).id(model.allImages[index]).frame(height: getRect().width/3.7)
 //                    }.id(model.allImages[index])
                     
                 }
@@ -53,7 +52,7 @@ struct GridView: View {
         }.overlay(
             ZStack {
                 if model.showTab  {
-                    ImageView(namespace:namespace)
+                    ImageView()
                 }
             }
         ).onChange(of: model.showTab) { newValue in
@@ -68,7 +67,6 @@ struct GridView: View {
 }
 
 struct ImageView: View {
-    let namespace: Namespace.ID
     @EnvironmentObject var model: SFGalleryViewModel
     @GestureState var draggingOffset: CGSize = .zero
     @State var selectedImage: String? = nil
@@ -80,17 +78,34 @@ struct ImageView: View {
                 TabView(selection: $model.selectedImageId) {
                     ForEach(model.allImages, id: \.self) {
                       image in
-                        Image(image).resizable().aspectRatio(contentMode: .fit).tag(image).scaleEffect(model.selectedImageId == image ? (model.fullImageScale > 1 ? model.fullImageScale : 1) : 1).offset(model.fullImageOffset).matchedGeometryEffect(id: image, in: namespace, isSource:model.showTab  ).gesture(MagnificationGesture().onChanged({ val in
-                            model.fullImageScale = val
-                        }).onEnded({ _ in
-                            withAnimation(.spring()) {
-                                model.fullImageScale = 1
+                      //  GeometryReader { geometry in
+                            VStack {
+                                Spacer()
+                              
+                                    Image(image).resizable().aspectRatio(contentMode: .fit)
+                                       
+                                        .aspectRatio(contentMode: .fit).tag(image).scaleEffect(model.selectedImageId == image ? (model.fullImageScale > 1 || model.fullImageScale < 1  ? model.fullImageScale : 1) : 1).offset(model.fullImageOffset).gesture(MagnificationGesture(
+                                        ).onChanged({ val in
+                                            model.fullImageScale = val
+                                        }).onEnded({ _ in
+                                            withAnimation(.spring()) {
+                                                model.fullImageScale = 1
+                                            }
+                                        }).simultaneously(with: TapGesture(count: 2).onEnded({
+                                            withAnimation {
+                                                model.fullImageScale  = model.fullImageScale > 1 ? 1 : 4
+                                            }
+                                        }))).readSize(onChange: { size in
+                                            print(size)
+                                        })
+                                    
+                                
+                                Spacer()
                             }
-                        }).simultaneously(with: TapGesture(count: 2).onEnded({
-                            withAnimation {
-                                model.fullImageScale  = model.fullImageScale > 1 ? 1 : 4
-                            }
-                        })))               }
+                            
+                       // }
+                        
+                    }
                 }.onAppear {
                   
                 }.tabViewStyle(PageTabViewStyle()).overlay(
@@ -112,22 +127,27 @@ struct ImageView: View {
 
 struct SFThumbView: View {
     @EnvironmentObject var model: SFGalleryViewModel
-    let namespace: Namespace.ID
+
     var index: Int
     var body: some View {
-        Button {
-            withAnimation {
-                model.selectedImageId = model.allImages[index]
-                model.fullImageOffset = .zero
-                model.backOpacity = 1.0
-                model.showTab = true
+        GeometryReader { geometry in
+            Button {
+                withAnimation {
+                    model.selectedImageId = model.allImages[index]
+                    model.fullImageOffset = .zero
+                    model.backOpacity = 1.0
+                    model.selectedItemFrame =  geometry.frame(in: .global)
+                    model.showTab = true
+                }
+            } label: {
+                ZStack {
+                    Image(model.allImages[index]).resizable().aspectRatio(contentMode: .fill).frame(width:geometry.size.width,height:geometry.size.height).cornerRadius(6.0)
+                }.clipped().opacity(model.allImages[index] == model.selectedImageId ? model.opacityOfSelectedItem : 1.0)
+            }.onAppear {
+              //  print (geometry.frame(in: .global))
+               
             }
-        } label: {
-            ZStack {
-                Image(model.allImages[index]).resizable().aspectRatio(contentMode: .fill).frame(width: getRect().width / 3.7, height: getRect().width / 3.7).cornerRadius(6.0)
-            }.opacity(model.allImages[index] == model.selectedImageId ? model.opacityOfSelectedItem : 1.0)
         }
-
        
     }
 }
@@ -144,4 +164,21 @@ extension View {
     func getRect() -> CGRect {
        return  UIScreen.main.bounds
     }
+}
+
+extension View {
+  func readSize(onChange: @escaping (CGSize) -> Void) -> some View {
+    background(
+      GeometryReader { geometryProxy in
+        Color.clear
+          .preference(key: SizePreferenceKey.self, value: geometryProxy.size)
+      }
+    )
+    .onPreferenceChange(SizePreferenceKey.self, perform: onChange)
+  }
+}
+
+private struct SizePreferenceKey: PreferenceKey {
+  static var defaultValue: CGSize = .zero
+  static func reduce(value: inout CGSize, nextValue: () -> CGSize) {}
 }

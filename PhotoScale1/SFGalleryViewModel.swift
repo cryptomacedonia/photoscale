@@ -17,6 +17,9 @@ class SFGalleryViewModel : ObservableObject {
     @Published var backOpacity: Double = 1.0
     @Published var fullImageScale: CGFloat = 1
     @Published var opacityOfSelectedItem: Double = 1.0
+    @Published var selectedItemFrame: CGRect = .zero
+ 
+    @Published var currentTabViewImageDefaultFrame: CGRect = .zero
     func onChange(value: CGSize) {
         DispatchQueue.main.async { [self] in
             fullImageOffset = value
@@ -40,10 +43,13 @@ class SFGalleryViewModel : ObservableObject {
                 backOpacity = 1.0
             } else {
                 withAnimation {
-                    showTab.toggle()
+                    fullImageScale = 0.3
+                    showTab = false
+                    
                 }
-                fullImageOffset = .zero
-                backOpacity = 1.0
+                
+//                fullImageOffset = .zero
+//                backOpacity = 1.0
             }
         }
     }
