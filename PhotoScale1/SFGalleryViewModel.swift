@@ -43,9 +43,10 @@ class SFGalleryViewModel : ObservableObject {
                 backOpacity = 1.0
             } else {
                 withAnimation {
-                    fullImageScale = 0.3
                     showTab = false
-                    
+//                    fullImageScale = 0.3
+
+                   // fullImageOffset = .zero
                 }
                 
 //                fullImageOffset = .zero
