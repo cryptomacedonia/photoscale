@@ -14,10 +14,8 @@
             filePath = "PhotoScale1/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "120"
-            endingLineNumber = "120"
-            landmarkName = "body"
-            landmarkType = "24">
+            startingLineNumber = "173"
+            endingLineNumber = "173">
             <Locations>
                <Location
                   uuid = "46F57380-FEF4-4245-86F4-220B93FE5924 - e77e95984b36692e"
@@ -62,8 +60,8 @@
             filePath = "PhotoScale1/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "45"
-            endingLineNumber = "45"
+            startingLineNumber = "40"
+            endingLineNumber = "40"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -71,17 +69,47 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "26BA8C2B-92BE-4D1C-A81A-7CFF8FA949C5"
+            uuid = "FCA31A97-23D9-470C-8EAA-036A6B37CB52"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PhotoScale1/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "34"
-            endingLineNumber = "34"
-            landmarkName = "body"
-            landmarkType = "24">
+            startingLineNumber = "179"
+            endingLineNumber = "179">
+            <Locations>
+               <Location
+                  uuid = "FCA31A97-23D9-470C-8EAA-036A6B37CB52 - cb0ca36fd08b637f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (SwiftUI.GeometryProxy) -&gt; SwiftUI.Button&lt;&lt;&lt;opaque return type of SwiftUI.View.opacity(Swift.Double) -&gt; some&gt;&gt;.0&gt; in PhotoScale1.SFThumbView.body.getter : some"
+                  moduleName = "PhotoScale1"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/igorjovcevski/photoscale/PhotoScale1/ContentView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "129"
+                  endingLineNumber = "129"
+                  offsetFromSymbolStart = "456">
+               </Location>
+               <Location
+                  uuid = "FCA31A97-23D9-470C-8EAA-036A6B37CB52 - d1983c99a6e8fa4"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #3 () -&gt; () in closure #1 (SwiftUI.GeometryProxy) -&gt; &lt;&lt;opaque return type of SwiftUI.View.onAppear(perform: Swift.Optional&lt;() -&gt; ()&gt;) -&gt; some&gt;&gt;.0 in PhotoScale1.SFThumbView.body.getter : some"
+                  moduleName = "PhotoScale1"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/igorjovcevski/photoscale/PhotoScale1/ContentView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "129"
+                  endingLineNumber = "129"
+                  offsetFromSymbolStart = "48">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
